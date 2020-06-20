@@ -1,8 +1,8 @@
 .cf-progressbar-container {
-  background-color: grey;
+  background-color: whitesmoke;
 }
 
 .cf-progressbar {
-  background-color: red;
+  background-color: #2d63fd;
   transition: width 1s, height 1s;
 }
