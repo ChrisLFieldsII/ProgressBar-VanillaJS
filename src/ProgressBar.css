@@ -4,6 +4,6 @@
 
 .cf-progressbar {
   height: 4px;
-  width: 20%;
   background-color: red;
+  transition: width 1s;
 }
