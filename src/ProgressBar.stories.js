@@ -6,6 +6,15 @@ export default {
   title: 'Progress Bar Demo',
 };
 
+function startInterval({ Bar, progress = 0, repeat = true }) {
+  let interval = setInterval(() => {
+    progress += 20;
+    if (progress > 100 && repeat) progress = 0;
+    else if (progress > 100 && !repeat) clearInterval(interval);
+    Bar.setProgress(progress);
+  }, 1000);
+}
+
 export const ProgressBarDefault = () => {
   return new ProgressBar().render();
 };
@@ -13,13 +22,8 @@ export const ProgressBarDefault = () => {
 export const ProgresBarInterval = () => {
   const Bar = new ProgressBar();
   const Comp = Bar.render();
-  let progress = 0;
 
-  setInterval(() => {
-    progress += 20;
-    if (progress > 100) progress = 0;
-    Bar.setProgress(progress);
-  }, 1000);
+  startInterval({ Bar });
 
   return Comp;
 };
@@ -31,8 +35,9 @@ async function wait(time) {
     }, time * 1000);
   });
 }
-const getPromises = (numPromises = 9, waitTime = 5) =>
-  new Array(Number(numPromises)).fill('').map((_) => wait(Math.random() * Number(waitTime)));
+function getPromises(numPromises = 9, waitTime = 5) {
+  return new Array(Number(numPromises)).fill('').map((_) => wait(Math.random() * Number(waitTime)));
+}
 
 export const ProgressBarPromises = () => {
   const Bar = new ProgressBar();
@@ -80,4 +85,30 @@ export const ProgressBarPromises = () => {
   Container.append(NumPromisesContainer, MaxWaitTimeContainer, Comp);
 
   return Container;
+};
+
+export const ProgressBarCustomStyle = () => {
+  const Bar = new ProgressBar({
+    innerBarStyle: {
+      backgroundColor: 'orange',
+      height: '10px',
+      borderRadius: '10px',
+    },
+    outerBarStyle: {
+      borderRadius: '10px',
+    },
+  });
+  const Comp = Bar.render();
+
+  startInterval({ Bar, repeat: false });
+
+  return Comp;
+};
+
+export const ProgressBarInitialProgress = () => {
+  const Bar = new ProgressBar({
+    initProgress: 60,
+  });
+  const Comp = Bar.render();
+  return Comp;
 };

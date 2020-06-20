@@ -13,28 +13,50 @@ async function getPromiseState(promise) {
  * @desc Progress Bar.
  * Can take array of promises to control progress (uncontrolled) or
  * manually set progress (controlled).
+ * Note: Only apply height to inner bar
  */
 class ProgressBar {
-  constructor({ autoHideOnEnd = true } = {}) {
+  constructor({
+    autoHideOnEnd = false,
+    outerBarStyle = {},
+    innerBarStyle = {},
+    initProgress = 0,
+  } = {}) {
     this.autoHideOnEnd = autoHideOnEnd;
+    this.outerBarStyle = outerBarStyle;
+    this.innerBarStyle = innerBarStyle;
+    this.initProgress = initProgress;
 
     this.progress = 0;
     this.inProgress = false;
     this.Container = null;
     this.Bar = null;
     this.interval = null;
+    this.height = innerBarStyle.height || '4px';
   }
+
+  /**
+   * @desc Take style object and apply to element
+   * @param {HTMLElement} element Element
+   */
+  applyStyle = (element, style) => {
+    Object.entries(style).forEach(([key, value]) => {
+      element.style[key] = value;
+    });
+  };
 
   startProgress = () => {
     this.progress = 0;
     this.inProgress = true;
-    this.Bar.style.height = '4px';
+    this.Bar.style.height = this.height;
+    return this;
   };
 
   endProgress = () => {
     clearInterval(this.interval);
     this.inProgress = false;
     if (this.autoHideOnEnd) this.hide();
+    return this;
   };
 
   /**
@@ -42,6 +64,12 @@ class ProgressBar {
    * @param {number} progress Percentage 0-100
    */
   setProgress = (progress) => {
+    if (progress < 0) progress = 0;
+    if (progress > 100) {
+      progress = 100;
+      this.endProgress();
+    }
+
     this.progress = progress;
     this.Bar.style.width = progress + '%';
     return this;
@@ -80,25 +108,30 @@ class ProgressBar {
         }
       });
     }, 50);
+
+    return this;
   }
 
   hide = () => {
     this.Bar.style.height = '0';
+    return this;
   };
 
   render = () => {
     const Container = document.createElement('div');
     this.Container = Container;
     Container.classList.add('cf-progressbar-container');
+    this.applyStyle(Container, this.outerBarStyle);
 
     const Bar = document.createElement('div');
     this.Bar = Bar;
     Bar.classList.add('cf-progressbar');
-    Bar.style.height = '4px';
+    Bar.style.height = this.height;
+    this.applyStyle(Bar, this.innerBarStyle);
 
     Container.append(Bar);
 
-    this.setProgress(0);
+    this.setProgress(this.initProgress);
 
     return Container;
   };
