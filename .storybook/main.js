@@ -1,4 +1,4 @@
 module.exports = {
-  stories: ['../stories/**/*.stories.js'],
+  stories: ['../src/ProgressBar.stories.js'],
   addons: ['@storybook/addon-actions/register'],
 };
