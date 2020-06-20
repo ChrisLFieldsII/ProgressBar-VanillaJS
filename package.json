@@ -6,13 +6,20 @@
   "scripts": {
     "build:dev": "npx webpack --env dev",
     "build:dev:updateDemo": "yarn build:dev && cd demo && yarn update",
-    "build:prod": "npx webpack --env prod"
+    "build:prod": "npx webpack --env prod",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/html": "^5.3.19",
+    "babel-loader": "^8.1.0",
     "css-loader": "^3.6.0",
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
     "webpack-merge": "^4.2.2"
-  }
+  },
+  "dependencies": {}
 }
