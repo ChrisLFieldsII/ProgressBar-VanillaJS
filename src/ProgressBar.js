@@ -51,6 +51,9 @@ class ProgressBar {
     });
   };
 
+  /**
+   * @desc Set Progress Bar to start progress
+   */
   startProgress = () => {
     this.progress = 0;
     this.inProgress = true;
@@ -58,6 +61,9 @@ class ProgressBar {
     return this;
   };
 
+  /**
+   * @desc Set Progress Bar to stop progress
+   */
   endProgress = () => {
     clearInterval(this.interval);
     this.inProgress = false;
@@ -70,6 +76,8 @@ class ProgressBar {
    * @param {number} progress Percentage 0-100
    */
   setProgress = (progress) => {
+    if (!this.inProgress) return;
+
     if (progress < 0) progress = 0;
     if (progress >= 100) {
       progress = 100;
@@ -99,7 +107,6 @@ class ProgressBar {
     this.interval = setInterval(() => {
       promises.forEach(async (promise) => {
         const promiseState = await getPromiseState(promise);
-        console.log(promiseState);
 
         const isInDoneState = promiseState === 'fulfilled' || promiseState === 'rejected';
         if (isInDoneState && !promise.addedToProgress) {
@@ -119,11 +126,18 @@ class ProgressBar {
     return this;
   }
 
+  /**
+   * @desc Hide Progress Bar
+   */
   hide = () => {
     this.Bar.style.height = '0';
     return this;
   };
 
+  /**
+   * @desc Create Progress Bar
+   * @returns {HTMLDivElement} Element
+   */
   render = () => {
     const Container = document.createElement('div');
     this.Container = Container;
