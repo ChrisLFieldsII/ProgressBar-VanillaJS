@@ -1,0 +1,18 @@
+{
+  "name": "@chrisfieldsii/progressbar-vanilla",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build:dev": "npx webpack --env dev",
+    "build:dev:updateDemo": "yarn build:dev && cd demo && yarn update",
+    "build:prod": "npx webpack --env prod"
+  },
+  "devDependencies": {
+    "css-loader": "^3.6.0",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-merge": "^4.2.2"
+  }
+}
