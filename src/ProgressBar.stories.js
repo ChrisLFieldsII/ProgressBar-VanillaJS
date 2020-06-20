@@ -6,7 +6,7 @@ export default {
   title: 'Progress Bar Demo',
 };
 
-function startInterval({ Bar, progress = 0, repeat = true }) {
+function startProgressInterval({ Bar, progress = 0, repeat = true }) {
   let interval = setInterval(() => {
     progress += 20;
     if (progress > 100 && repeat) progress = 0;
@@ -23,7 +23,7 @@ export const ProgresBarInterval = () => {
   const Bar = new ProgressBar();
   const Comp = Bar.render();
 
-  startInterval({ Bar });
+  startProgressInterval({ Bar });
 
   return Comp;
 };
@@ -100,7 +100,7 @@ export const ProgressBarCustomStyle = () => {
   });
   const Comp = Bar.render();
 
-  startInterval({ Bar, repeat: false });
+  startProgressInterval({ Bar, repeat: false });
 
   return Comp;
 };
