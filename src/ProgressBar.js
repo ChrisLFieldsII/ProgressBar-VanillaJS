@@ -1,5 +1,7 @@
 import './ProgressBar.css';
 
+function noop() {}
+
 // https://stackoverflow.com/questions/30564053/how-can-i-synchronously-determine-a-javascript-promises-state
 async function getPromiseState(promise) {
   const test = {};
@@ -22,12 +24,14 @@ class ProgressBar {
     innerBarStyle = {},
     initProgress = 0,
     cssPrefix = 'cf-light',
+    onChange = noop,
   } = {}) {
     this.autoHideOnEnd = autoHideOnEnd;
     this.outerBarStyle = outerBarStyle;
     this.innerBarStyle = innerBarStyle;
     this.initProgress = initProgress;
     this.cssPrefix = cssPrefix;
+    this.onChange = onChange;
 
     this.progress = 0;
     this.inProgress = false;
@@ -73,6 +77,7 @@ class ProgressBar {
     }
 
     this.progress = progress;
+    this.onChange(progress);
     this.Bar.style.width = progress + '%';
     return this;
   };
