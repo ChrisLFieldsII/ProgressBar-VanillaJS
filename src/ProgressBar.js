@@ -15,7 +15,9 @@ async function getPromiseState(promise) {
  * manually set progress (controlled).
  */
 class ProgressBar {
-  constructor() {
+  constructor({ autoHideOnEnd = true } = {}) {
+    this.autoHideOnEnd = autoHideOnEnd;
+
     this.progress = 0;
     this.inProgress = false;
     this.Container = null;
@@ -26,10 +28,13 @@ class ProgressBar {
   startProgress = () => {
     this.progress = 0;
     this.inProgress = true;
+    this.Bar.style.height = '4px';
   };
 
   endProgress = () => {
+    clearInterval(this.interval);
     this.inProgress = false;
+    if (this.autoHideOnEnd) this.hide();
   };
 
   /**
@@ -77,6 +82,10 @@ class ProgressBar {
     }, 50);
   }
 
+  hide = () => {
+    this.Bar.style.height = '0';
+  };
+
   render = () => {
     const Container = document.createElement('div');
     this.Container = Container;
@@ -85,6 +94,7 @@ class ProgressBar {
     const Bar = document.createElement('div');
     this.Bar = Bar;
     Bar.classList.add('cf-progressbar');
+    Bar.style.height = '4px';
 
     Container.append(Bar);
 
