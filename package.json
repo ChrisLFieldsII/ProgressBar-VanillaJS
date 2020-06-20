@@ -5,7 +5,6 @@
   "license": "MIT",
   "scripts": {
     "build:dev": "npx webpack --env dev",
-    "build:dev:updateDemo": "yarn build:dev && cd demo && yarn update",
     "build:prod": "npx webpack --env prod",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
