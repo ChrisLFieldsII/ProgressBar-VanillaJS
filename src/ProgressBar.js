@@ -21,11 +21,13 @@ class ProgressBar {
     outerBarStyle = {},
     innerBarStyle = {},
     initProgress = 0,
+    cssPrefix = 'cf-light',
   } = {}) {
     this.autoHideOnEnd = autoHideOnEnd;
     this.outerBarStyle = outerBarStyle;
     this.innerBarStyle = innerBarStyle;
     this.initProgress = initProgress;
+    this.cssPrefix = cssPrefix;
 
     this.progress = 0;
     this.inProgress = false;
@@ -120,12 +122,12 @@ class ProgressBar {
   render = () => {
     const Container = document.createElement('div');
     this.Container = Container;
-    Container.classList.add('cf-progressbar-container');
+    Container.classList.add(`${this.cssPrefix}-progressbar-container`);
     this.applyStyle(Container, this.outerBarStyle);
 
     const Bar = document.createElement('div');
     this.Bar = Bar;
-    Bar.classList.add('cf-progressbar');
+    Bar.classList.add(`${this.cssPrefix}-progressbar`);
     Bar.style.height = this.height;
     this.applyStyle(Bar, this.innerBarStyle);
 
