@@ -4,4 +4,5 @@ Customizable Progress Bar. Features include showing progress based off array of 
 
 ## Todo
 
-Fill this out...
+- Fill this out...
+- Convert to [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) for better abstraction
