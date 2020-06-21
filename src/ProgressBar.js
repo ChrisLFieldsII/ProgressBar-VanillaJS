@@ -115,7 +115,6 @@ class ProgressBar {
       if (this.autoEnd) this.endProgress();
     }
 
-    console.log(`setting progress: ${progress}`);
     this.progress = progress;
     this.onChange(progress);
     this.Bar.style.width = progress + '%';
