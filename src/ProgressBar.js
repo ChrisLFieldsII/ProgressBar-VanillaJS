@@ -147,15 +147,23 @@ class ProgressBar {
   }
 
   startInterval = ({ progress = 0, repeat = true, step = 20, timeSec = 1 } = {}) => {
-    this.startProgress();
-
-    if (progress) this.setProgress(progress);
-
-    this.interval = setInterval(() => {
+    const setIntervalProgress = () => {
       let newProgress = this.progress + step;
       if (newProgress > 100 && repeat) newProgress = 0;
       else if (newProgress > 100 && !repeat) this.endProgress();
       this.setProgress(newProgress);
+    };
+
+    this.startProgress();
+
+    if (progress) this.setProgress(progress);
+
+    // the timeout helps keep progress bar from instantly showing.
+    // need to initially set progress since interval takes timeSec to kick in
+    setTimeout(setIntervalProgress, timeSec / 2);
+
+    this.interval = setInterval(() => {
+      setIntervalProgress();
     }, 1000 * timeSec);
 
     return this;
