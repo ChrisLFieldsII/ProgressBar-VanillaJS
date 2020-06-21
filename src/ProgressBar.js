@@ -85,10 +85,10 @@ class ProgressBar {
    * Must be called before setting progress.
    */
   startProgress = () => {
-    this.clearIntervals();
-    this.progress = 0;
     this.inProgress = true;
+    this.clearIntervals();
     this.show();
+    this.setProgress(0);
     return this;
   };
 
@@ -96,8 +96,8 @@ class ProgressBar {
    * @desc Set Progress Bar to stop progress
    */
   endProgress = () => {
-    this.clearIntervals();
     this.inProgress = false;
+    this.clearIntervals();
     if (this.autoHideOnEnd) this.hide();
     return this;
   };
@@ -115,6 +115,7 @@ class ProgressBar {
       if (this.autoEnd) this.endProgress();
     }
 
+    console.log(`setting progress: ${progress}`);
     this.progress = progress;
     this.onChange(progress);
     this.Bar.style.width = progress + '%';
@@ -126,7 +127,7 @@ class ProgressBar {
    * @param {Array.<Promise>} promises Array of promises
    */
   startPromises(promises) {
-    if (!promises.length) return;
+    if (!promises.length) return this;
 
     this.startProgress();
 
@@ -168,6 +169,8 @@ class ProgressBar {
       else if (diffFromMaxProgress < step) addition = diffFromMaxProgress;
 
       let newProgress = this.progress + addition;
+
+      // check if repeating
       if (newProgress >= 100 && this.progress == 100 && repeat) newProgress = 0;
 
       this.setProgress(newProgress);

@@ -132,7 +132,7 @@ export const CustomStyle = () => {
   });
   const Comp = Bar.render();
 
-  Bar.startInterval({ repeat: false });
+  Bar.startInterval({ repeat: true });
 
   return Comp;
 };
@@ -151,7 +151,7 @@ export const AutoHideOnEnd = () => {
   });
   const Comp = Bar.render();
 
-  Bar.startInterval({ repeat: false });
+  Bar.startInterval({ repeat: false, step: 40 });
 
   const Container = document.createElement('div');
 
@@ -159,7 +159,7 @@ export const AutoHideOnEnd = () => {
   Btn.innerText = 'Reset';
   Btn.classList.add('btn', 'btn-primary', 'mt-3');
   Btn.addEventListener('click', () => {
-    Bar.startInterval({ repeat: false });
+    Bar.startInterval({ repeat: false, step: 40 });
   });
 
   Container.append(Comp, Btn);
