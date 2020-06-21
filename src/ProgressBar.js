@@ -48,6 +48,7 @@ class ProgressBar {
     this.progress = 0;
     this.inProgress = false;
     this.height = innerBarStyle.height || '4px';
+    this.promiseInterval = null;
     this.interval = null;
   }
 
@@ -62,10 +63,19 @@ class ProgressBar {
   };
 
   /**
+   * @desc Hide Progress Bar
+   */
+  hide = () => {
+    this.Bar.style.height = '0';
+    return this;
+  };
+
+  /**
    * @desc Set Progress Bar to start progress.
    * Must be called before setting progress.
    */
   startProgress = () => {
+    this.clearIntervals();
     this.progress = 0;
     this.inProgress = true;
     this.Bar.style.height = this.height;
@@ -76,7 +86,7 @@ class ProgressBar {
    * @desc Set Progress Bar to stop progress
    */
   endProgress = () => {
-    clearInterval(this.interval);
+    this.clearIntervals();
     this.inProgress = false;
     if (this.autoHideOnEnd) this.hide();
     return this;
@@ -105,17 +115,16 @@ class ProgressBar {
    * @desc Set progress based off of promises
    * @param {Array.<Promise>} promises Array of promises
    */
-  setProgressPromises(promises) {
+  startPromises(promises) {
     if (!promises.length) return;
 
-    clearInterval(this.interval);
     this.startProgress();
 
     const numPromises = promises.length;
     const step = 100 / numPromises;
     let promisesAdded = 0;
 
-    this.interval = setInterval(() => {
+    this.promiseInterval = setInterval(() => {
       promises.forEach(async (promise) => {
         const promiseState = await getPromiseState(promise);
 
@@ -137,12 +146,20 @@ class ProgressBar {
     return this;
   }
 
-  /**
-   * @desc Hide Progress Bar
-   */
-  hide = () => {
-    this.Bar.style.height = '0';
-    return this;
+  startInterval = ({ progress = 0, repeat = true, step = 20, timeSec = 1 }) => {
+    this.startProgress();
+
+    this.interval = setInterval(() => {
+      let newProgress = progress + step;
+      if (newProgress > 100 && repeat) progress = 0;
+      else if (progress > 100 && !repeat) this.endProgress();
+      this.setProgress(progress);
+    }, 1000 * timeSec);
+  };
+
+  clearIntervals = () => {
+    clearInterval(this.promiseInterval);
+    clearInterval(this.interval);
   };
 
   /**
