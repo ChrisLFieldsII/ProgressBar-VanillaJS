@@ -6,16 +6,6 @@ export default {
   title: 'Progress Bar Demo',
 };
 
-function startProgressInterval({ Bar, progress = 0, repeat = true }) {
-  let interval = setInterval(() => {
-    progress += 20;
-    if (progress > 100 && repeat) progress = 0;
-    else if (progress > 100 && !repeat) clearInterval(interval);
-    Bar.setProgress(progress);
-  }, 1000);
-  return interval;
-}
-
 async function wait(time) {
   return new Promise((res) => {
     setTimeout(() => {
@@ -26,6 +16,7 @@ async function wait(time) {
 function getPromises(numPromises = 9, waitTime = 5) {
   return new Array(Number(numPromises)).fill('').map((_) => wait(Math.random() * Number(waitTime)));
 }
+
 function FormRow({ label = '', value = '', onChange }) {
   const Container = document.createElement('div');
   const Label = document.createElement('label');
@@ -49,7 +40,8 @@ export const Interval = () => {
 
   const Container = document.createElement('div');
 
-  startProgressInterval({ Bar });
+  // startProgressInterval({ Bar });
+  Bar.startInterval();
 
   Container.append(Comp);
 
@@ -72,7 +64,7 @@ export const Promises = () => {
     onChange: (e) => {
       console.log(e);
       numPromises = e.target.value;
-      Bar.setProgressPromises(getPromises(numPromises, maxWait));
+      Bar.startPromises(getPromises(numPromises, maxWait));
     },
   });
   NumPromisesFormRow.style.marginTop = '20px';
@@ -84,11 +76,11 @@ export const Promises = () => {
     onChange: (e) => {
       console.log(e);
       maxWait = e.target.value;
-      Bar.setProgressPromises(getPromises(numPromises, maxWait));
+      Bar.startPromises(getPromises(numPromises, maxWait));
     },
   });
 
-  Bar.setProgressPromises(getPromises());
+  Bar.startPromises(getPromises());
 
   Container.append(Comp, NumPromisesFormRow, MaxWaitTimeFormRow);
 
@@ -108,7 +100,7 @@ export const CustomStyle = () => {
   });
   const Comp = Bar.render();
 
-  startProgressInterval({ Bar, repeat: false });
+  Bar.startInterval({ repeat: false });
 
   return Comp;
 };
@@ -122,13 +114,12 @@ export const InitialProgress = () => {
 };
 
 export const AutoHideOnEnd = () => {
-  let interval;
   const Bar = new ProgressBar({
     autoHideOnEnd: true,
   });
   const Comp = Bar.render();
 
-  interval = startProgressInterval({ Bar, repeat: false });
+  Bar.startInterval({ repeat: false });
 
   const Container = document.createElement('div');
 
@@ -136,10 +127,7 @@ export const AutoHideOnEnd = () => {
   Btn.innerText = 'Reset';
   Btn.classList.add('btn', 'btn-primary', 'mt-3');
   Btn.addEventListener('click', () => {
-    clearInterval(interval);
-    Bar.startProgress();
-
-    interval = startProgressInterval({ Bar, repeat: false });
+    Bar.startInterval({ repeat: false });
   });
 
   Container.append(Comp, Btn);

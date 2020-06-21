@@ -97,7 +97,7 @@ class ProgressBar {
    * @param {number} progress Percentage 0-100
    */
   setProgress = (progress) => {
-    if (!this.inProgress) return;
+    if (!this.inProgress) return alert('not in progress');
 
     if (progress < 0) progress = 0;
     if (progress >= 100) {
@@ -146,15 +146,19 @@ class ProgressBar {
     return this;
   }
 
-  startInterval = ({ progress = 0, repeat = true, step = 20, timeSec = 1 }) => {
+  startInterval = ({ progress = 0, repeat = true, step = 20, timeSec = 1 } = {}) => {
     this.startProgress();
 
+    if (progress) this.setProgress(progress);
+
     this.interval = setInterval(() => {
-      let newProgress = progress + step;
-      if (newProgress > 100 && repeat) progress = 0;
-      else if (progress > 100 && !repeat) this.endProgress();
-      this.setProgress(progress);
+      let newProgress = this.progress + step;
+      if (newProgress > 100 && repeat) newProgress = 0;
+      else if (newProgress > 100 && !repeat) this.endProgress();
+      this.setProgress(newProgress);
     }, 1000 * timeSec);
+
+    return this;
   };
 
   clearIntervals = () => {
