@@ -23,7 +23,7 @@ class ProgressBar {
     // customization
     outerBarStyle = {},
     innerBarStyle = {},
-    cssPrefix = 'cf-light',
+    cssPrefix = 'cfpg-light',
 
     // event handlers
     onChange = noop,
