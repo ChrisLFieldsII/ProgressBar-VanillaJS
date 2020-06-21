@@ -10,6 +10,13 @@ const DEV = 'dev';
 const PROD = 'prod';
 
 const baseConfig = {
+  entry: './src/ProgressBar.js',
+  output: {
+    filename: 'index.js',
+    path: path.resolve(__dirname, 'dist'),
+    library: '@chrisfieldsii/progressbar-vanillajs',
+    libraryTarget: 'umd',
+  },
   plugins: [new CleanWebpackPlugin(), new MiniCssExtractPlugin({ filename: 'index.css' })],
   module: {
     rules: [
@@ -32,27 +39,13 @@ function getConfig(env) {
 
 function getDevConfig() {
   return merge(baseConfig, {
-    entry: './src/ProgressBar.js',
     mode: 'development',
-    output: {
-      filename: 'index.js',
-      path: path.resolve(__dirname, 'dist'),
-      library: '@chrisfieldsii/progressbar-vanilla',
-      libraryTarget: 'umd',
-    },
   });
 }
 
 function getProdConfig() {
   return merge(baseConfig, {
-    entry: './src/ProgressBar.js',
     mode: 'production',
-    output: {
-      filename: 'index.js',
-      path: path.resolve(__dirname, 'dist'),
-      library: '@chrisfieldsii/progressbar-vanilla',
-      libraryTarget: 'umd',
-    },
     optimization: {
       minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
     },
