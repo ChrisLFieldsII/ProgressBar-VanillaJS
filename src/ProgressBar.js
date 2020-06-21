@@ -179,7 +179,7 @@ class ProgressBar {
 
     this.startProgress();
 
-    if (progress) this.setProgress(progress);
+    if (progress > 0) this.setProgress(progress);
 
     // the timeout helps keep progress bar from instantly showing.
     // need to initially set progress since interval takes timeSec to kick in
