@@ -112,3 +112,27 @@ export const ProgressBarInitialProgress = () => {
   const Comp = Bar.render();
   return Comp;
 };
+
+export const ProgressBarAutoHideOnEnd = () => {
+  const Bar = new ProgressBar({
+    autoHideOnEnd: true,
+  });
+  const Comp = Bar.render();
+
+  startProgressInterval({ Bar, repeat: false });
+
+  const Container = document.createElement('div');
+
+  const Btn = document.createElement('button');
+  Btn.innerText = 'Reset';
+  Btn.classList.add('btn', 'btn-primary', 'mt-3');
+  Btn.addEventListener('click', () => {
+    Bar.startProgress();
+
+    startProgressInterval({ Bar, repeat: false });
+  });
+
+  Container.append(Comp, Btn);
+
+  return Container;
+};
