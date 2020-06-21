@@ -73,6 +73,14 @@ class ProgressBar {
   };
 
   /**
+   * @desc Show Progress Bar
+   */
+  show = () => {
+    this.Bar.style.height = this.height;
+    return this;
+  };
+
+  /**
    * @desc Set Progress Bar to start progress.
    * Must be called before setting progress.
    */
@@ -80,7 +88,7 @@ class ProgressBar {
     this.clearIntervals();
     this.progress = 0;
     this.inProgress = true;
-    this.Bar.style.height = this.height;
+    this.show();
     return this;
   };
 
