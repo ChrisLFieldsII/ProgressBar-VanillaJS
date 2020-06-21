@@ -17,12 +17,12 @@ function getPromises(numPromises = 9, waitTime = 5) {
   return new Array(Number(numPromises)).fill('').map((_) => wait(Math.random() * Number(waitTime)));
 }
 
-function FormRow({ label = '', value = '', onChange }) {
+function FormRow({ label = '', value = '', onChange, type = 'number' }) {
   const Container = document.createElement('div');
   const Label = document.createElement('label');
   const Input = document.createElement('input');
   Label.innerHTML = label;
-  Input.type = 'number';
+  Input.type = type;
   Input.value = value;
   Input.style.margin = '10px';
   Input.addEventListener('change', onChange);
@@ -40,10 +40,44 @@ export const Interval = () => {
 
   const Container = document.createElement('div');
 
-  // startProgressInterval({ Bar });
+  let step = 20,
+    timeSec = 1,
+    repeat = false;
+
+  // Create input to control interval step
+  const StepFormRow = FormRow({
+    label: 'Set Interval Step',
+    value: step + '',
+    onChange: (e) => {
+      step = Number(e.target.value);
+      Bar.startInterval({ step, timeSec, repeat });
+    },
+  });
+  StepFormRow.style.marginTop = '20px';
+
+  // Create input to control interval time
+  const TimeFormRow = FormRow({
+    label: 'Set Interval Time',
+    value: timeSec + '',
+    onChange: (e) => {
+      timeSec = e.target.value;
+      Bar.startInterval({ step, timeSec, repeat });
+    },
+  });
+
+  const RepeatRow = FormRow({
+    label: 'Repeat',
+    value: repeat,
+    type: 'checkbox',
+    onChange: (e) => {
+      repeat = e.target.checked;
+      Bar.startInterval({ step, timeSec, repeat });
+    },
+  });
+
   Bar.startInterval();
 
-  Container.append(Comp);
+  Container.append(Comp, StepFormRow, TimeFormRow, RepeatRow);
 
   return Container;
 };
