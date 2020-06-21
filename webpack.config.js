@@ -1,16 +1,21 @@
 const path = require('path');
 const merge = require('webpack-merge');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
 
 // envs
 const DEV = 'dev';
 const PROD = 'prod';
 
 const baseConfig = {
+  plugins: [new CleanWebpackPlugin(), new MiniCssExtractPlugin({ filename: 'index.css' })],
   module: {
     rules: [
       {
-        test: /\.css/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
     ],
   },
@@ -48,12 +53,12 @@ function getProdConfig() {
       library: '@chrisfieldsii/progressbar-vanilla',
       libraryTarget: 'umd',
     },
+    optimization: {
+      minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+    },
   });
 }
 
 module.exports = (env = DEV) => {
-  console.log('\n');
-  console.log('====='.repeat(5));
-  console.log(`Building for env: ${env}`);
   return getConfig(env);
 };
