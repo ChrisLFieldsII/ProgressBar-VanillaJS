@@ -96,7 +96,6 @@ export const Promises = () => {
     label: 'How many Promises to load:&nbsp;',
     value: numPromises,
     onChange: (e) => {
-      console.log(e);
       numPromises = e.target.value;
       Bar.startPromises(getPromises(numPromises, maxWait));
     },
@@ -108,7 +107,6 @@ export const Promises = () => {
     label: 'Max time a Promise can wait:&nbsp;',
     value: maxWait,
     onChange: (e) => {
-      console.log(e);
       maxWait = e.target.value;
       Bar.startPromises(getPromises(numPromises, maxWait));
     },
