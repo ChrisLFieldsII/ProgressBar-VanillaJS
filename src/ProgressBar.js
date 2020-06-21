@@ -31,6 +31,7 @@ class ProgressBar {
     autoHideOnEnd = false,
     initProgress = 0,
     autoStart = true,
+    autoEnd = true,
   } = {}) {
     this.outerBarStyle = outerBarStyle;
     this.innerBarStyle = innerBarStyle;
@@ -41,6 +42,7 @@ class ProgressBar {
     this.autoHideOnEnd = autoHideOnEnd;
     this.initProgress = initProgress;
     this.autoStart = autoStart;
+    this.autoEnd = autoEnd;
 
     this.Container = null;
     this.Bar = null;
@@ -102,7 +104,7 @@ class ProgressBar {
     if (progress < 0) progress = 0;
     if (progress >= 100) {
       progress = 100;
-      this.endProgress();
+      if (this.autoEnd) this.endProgress();
     }
 
     this.progress = progress;
@@ -134,11 +136,6 @@ class ProgressBar {
           const newProgress = promisesAdded * step + step;
           this.setProgress(newProgress);
           promisesAdded++;
-
-          // check if this was last promise to be added
-          if (promisesAdded === numPromises) {
-            this.endProgress();
-          }
         }
       });
     }, 50);
@@ -146,11 +143,13 @@ class ProgressBar {
     return this;
   }
 
-  startInterval = ({ progress = 0, repeat = true, step = 20, timeSec = 1 } = {}) => {
+  startInterval = ({ progress = 0, repeat = false, step = 20, timeSec = 1 } = {}) => {
+    // if want to repeat, autoEnd can not be enabled
+    if (repeat) this.autoEnd = false;
+
     const setIntervalProgress = () => {
       let newProgress = this.progress + step;
       if (newProgress > 100 && repeat) newProgress = 0;
-      else if (newProgress > 100 && !repeat) this.endProgress();
       this.setProgress(newProgress);
     };
 
@@ -160,7 +159,7 @@ class ProgressBar {
 
     // the timeout helps keep progress bar from instantly showing.
     // need to initially set progress since interval takes timeSec to kick in
-    setTimeout(setIntervalProgress, timeSec / 2);
+    setTimeout(setIntervalProgress, 5);
 
     this.interval = setInterval(() => {
       setIntervalProgress();
