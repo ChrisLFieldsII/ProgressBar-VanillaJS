@@ -19,26 +19,36 @@ async function getPromiseState(promise) {
  */
 class ProgressBar {
   constructor({
-    autoHideOnEnd = false,
+    // customization
     outerBarStyle = {},
     innerBarStyle = {},
-    initProgress = 0,
     cssPrefix = 'cf-light',
+
+    // event handlers
     onChange = noop,
+
+    // configuration
+    autoHideOnEnd = false,
+    initProgress = 0,
+    autoStart = true,
   } = {}) {
-    this.autoHideOnEnd = autoHideOnEnd;
     this.outerBarStyle = outerBarStyle;
     this.innerBarStyle = innerBarStyle;
-    this.initProgress = initProgress;
     this.cssPrefix = cssPrefix;
+
     this.onChange = onChange;
+
+    this.autoHideOnEnd = autoHideOnEnd;
+    this.initProgress = initProgress;
+    this.autoStart = autoStart;
+
+    this.Container = null;
+    this.Bar = null;
 
     this.progress = 0;
     this.inProgress = false;
-    this.Container = null;
-    this.Bar = null;
-    this.interval = null;
     this.height = innerBarStyle.height || '4px';
+    this.interval = null;
   }
 
   /**
@@ -52,7 +62,8 @@ class ProgressBar {
   };
 
   /**
-   * @desc Set Progress Bar to start progress
+   * @desc Set Progress Bar to start progress.
+   * Must be called before setting progress.
    */
   startProgress = () => {
     this.progress = 0;
@@ -139,20 +150,25 @@ class ProgressBar {
    * @returns {HTMLDivElement} Element
    */
   render = () => {
+    // Create outer bar
     const Container = document.createElement('div');
     this.Container = Container;
     Container.classList.add(`${this.cssPrefix}-progressbar-container`);
     this.applyStyle(Container, this.outerBarStyle);
 
+    // Create inner bar
     const Bar = document.createElement('div');
     this.Bar = Bar;
     Bar.classList.add(`${this.cssPrefix}-progressbar`);
     Bar.style.height = this.height;
+    Bar.style.width = 0;
     this.applyStyle(Bar, this.innerBarStyle);
 
-    Container.append(Bar);
+    // Check configurations
+    if (this.autoStart) this.startProgress();
+    if (this.initProgress > 0) this.setProgress(this.initProgress);
 
-    this.setProgress(this.initProgress);
+    Container.append(Bar);
 
     return Container;
   };
