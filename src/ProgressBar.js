@@ -126,7 +126,7 @@ class ProgressBar {
    * @desc Set progress based off of promises
    * @param {Array.<Promise>} promises Array of promises
    */
-  startPromises(promises) {
+  startPromises = (promises) => {
     if (!promises.length) return this;
 
     this.startProgress();
@@ -150,7 +150,7 @@ class ProgressBar {
     }, 50);
 
     return this;
-  }
+  };
 
   /**
    * @desc Use an interval to control Bar.

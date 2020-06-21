@@ -1,13 +1,38 @@
 {
-  "name": "@chrisfieldsii/progressbar-vanilla",
-  "version": "1.0.0",
+  "name": "@chrisfieldsii/progressbar-vanillajs",
+  "description": "Customizable Progress Bar. Features include showing progress based off array of Promises, an interval, or manually.",
+  "version": "0.0.1",
   "main": "dist/index.js",
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/ChrisLFieldsII/ProgressBar-VanillaJS",
+    "type": "git"
+  },
+  "author": {
+    "email": "chrisjr06@gmail.com",
+    "name": "Chris Fields II"
+  },
+  "keywords": [
+    "javascript",
+    "vanilla",
+    "progress-bar",
+    "progressbar",
+    "promises"
+  ],
+  "bugs": {
+    "url": "https://github.com/ChrisLFieldsII/ProgressBar-VanillaJS/issues"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build:dev": "npx webpack --env dev",
     "build:prod": "npx webpack --env prod",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "jsdoc": "jsdoc src/ProgressBar.js README.md -d build.docs"
   },
   "devDependencies": {
     "@babel/core": "^7.10.3",
@@ -16,6 +41,7 @@
     "babel-loader": "^8.1.0",
     "bootstrap": "^4.5.0",
     "css-loader": "^3.6.0",
+    "jsdoc": "^3.6.4",
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
