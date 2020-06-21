@@ -53,61 +53,76 @@ class ProgressBar {
     this.height = innerBarStyle.height || '4px';
     this.promiseInterval = null;
     this.interval = null;
+
+    [
+      'applyStyle',
+      'hide',
+      'show',
+      'startProgress',
+      'endProgress',
+      'setProgress',
+      'startPromises',
+      'startInterval',
+      'clearIntervals',
+      'render',
+    ].forEach((binding) => {
+      this[binding] = this[binding].bind(this);
+    });
   }
 
   /**
    * @desc Take style object and apply to element
    * @param {HTMLElement} element Element
    */
-  applyStyle = (element, style) => {
+  applyStyle(element, style) {
     Object.entries(style).forEach(([key, value]) => {
       element.style[key] = value;
     });
-  };
+  }
 
   /**
    * @desc Hide Progress Bar
    */
-  hide = () => {
+  hide() {
     this.InnerBar.style.height = '0';
     return this;
-  };
+  }
 
   /**
    * @desc Show Progress Bar
    */
-  show = () => {
+  show() {
     this.InnerBar.style.height = this.height;
     return this;
-  };
+  }
 
   /**
    * @desc Set Progress Bar to start progress.
    * Must be called before setting progress.
    */
-  startProgress = () => {
+  startProgress() {
     this.inProgress = true;
     this.clearIntervals();
     this.show();
     this.setProgress(0);
     return this;
-  };
+  }
 
   /**
    * @desc Set Progress Bar to stop progress
    */
-  endProgress = () => {
+  endProgress() {
     this.inProgress = false;
     this.clearIntervals();
     if (this.autoHideOnEnd) this.hide();
     return this;
-  };
+  }
 
   /**
    * @desc Set progress of Bar
    * @param {number} progress Percentage 0-100
    */
-  setProgress = (progress) => {
+  setProgress(progress) {
     if (!this.inProgress) return alert('not in progress');
 
     if (progress < 0) progress = 0;
@@ -120,13 +135,13 @@ class ProgressBar {
     this.onChange(progress);
     this.InnerBar.style.width = progress + '%';
     return this;
-  };
+  }
 
   /**
    * @desc Set progress based off of promises
    * @param {Array.<Promise>} promises Array of promises
    */
-  startPromises = (promises) => {
+  startPromises(promises) {
     if (!promises.length) return this;
 
     this.startProgress();
@@ -150,14 +165,14 @@ class ProgressBar {
     }, 50);
 
     return this;
-  };
+  }
 
   /**
    * @desc Use an interval to control Bar.
    * Note: Clients that use repeat: true are responsible for calling `endProgress`
    * @param {Object} opts Options
    */
-  startInterval = ({ progress = 0, repeat = false, step = 20, timeSec = 1 } = {}) => {
+  startInterval({ progress = 0, repeat = false, step = 20, timeSec = 1 } = {}) {
     // if want to repeat, autoEnd can not be enabled
     if (repeat) this.autoEnd = false;
 
@@ -190,18 +205,18 @@ class ProgressBar {
     }, 1000 * timeSec);
 
     return this;
-  };
+  }
 
-  clearIntervals = () => {
+  clearIntervals() {
     clearInterval(this.promiseInterval);
     clearInterval(this.interval);
-  };
+  }
 
   /**
    * @desc Create Progress Bar
    * @returns {HTMLDivElement} Element
    */
-  render = () => {
+  render() {
     // Create outer bar
     const OuterBar = document.createElement('div');
     this.OuterBar = OuterBar;
@@ -223,7 +238,7 @@ class ProgressBar {
     OuterBar.append(InnerBar);
 
     return OuterBar;
-  };
+  }
 }
 
 export default ProgressBar;
