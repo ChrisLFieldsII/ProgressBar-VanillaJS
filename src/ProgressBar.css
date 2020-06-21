@@ -1,17 +1,17 @@
-.cf-light-progressbar-container {
+.cf-light-progressbar-outerbar {
   background-color: whitesmoke;
 }
 
-.cf-light-progressbar {
+.cf-light-progressbar-innerbar {
   background-color: #2d63fd;
   transition: width 1s, height 1s;
 }
 
-.cf-dark-progressbar-container {
+.cf-dark-progressbar-outerbar {
   background-color: grey;
 }
 
-.cf-dark-progressbar {
+.cf-dark-progressbar-innerbar {
   background-color: whitesmoke;
   transition: width 1s, height 1s;
 }

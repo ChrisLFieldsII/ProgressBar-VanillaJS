@@ -13,7 +13,8 @@ async function getPromiseState(promise) {
 
 /**
  * @desc Progress Bar.
- * Can take array of promises to control progress (uncontrolled) or
+ * Can take array of promises to control progress (uncontrolled),
+ * Use an interval to control progress (uncontrolled),
  * manually set progress (controlled).
  * Note: Only apply height to inner bar
  */
@@ -44,8 +45,8 @@ class ProgressBar {
     this.autoStart = autoStart;
     this.autoEnd = autoEnd;
 
-    this.Container = null;
-    this.Bar = null;
+    this.OuterBar = null;
+    this.InnerBar = null;
 
     this.progress = 0;
     this.inProgress = false;
@@ -68,7 +69,7 @@ class ProgressBar {
    * @desc Hide Progress Bar
    */
   hide = () => {
-    this.Bar.style.height = '0';
+    this.InnerBar.style.height = '0';
     return this;
   };
 
@@ -76,7 +77,7 @@ class ProgressBar {
    * @desc Show Progress Bar
    */
   show = () => {
-    this.Bar.style.height = this.height;
+    this.InnerBar.style.height = this.height;
     return this;
   };
 
@@ -117,7 +118,7 @@ class ProgressBar {
 
     this.progress = progress;
     this.onChange(progress);
-    this.Bar.style.width = progress + '%';
+    this.InnerBar.style.width = progress + '%';
     return this;
   };
 
@@ -160,7 +161,8 @@ class ProgressBar {
     // if want to repeat, autoEnd can not be enabled
     if (repeat) this.autoEnd = false;
 
-    const setIntervalProgress = () => {
+    // helper function to set progess on interval
+    const setProgressInterval = () => {
       let addition = step;
       let diffFromMaxProgress = 100 - this.progress;
 
@@ -181,10 +183,10 @@ class ProgressBar {
 
     // the timeout helps keep progress bar from instantly showing.
     // need to initially set progress since interval takes timeSec to kick in
-    setTimeout(setIntervalProgress, 5);
+    setTimeout(setProgressInterval, 5);
 
     this.interval = setInterval(() => {
-      setIntervalProgress();
+      setProgressInterval();
     }, 1000 * timeSec);
 
     return this;
@@ -201,26 +203,26 @@ class ProgressBar {
    */
   render = () => {
     // Create outer bar
-    const Container = document.createElement('div');
-    this.Container = Container;
-    Container.classList.add(`${this.cssPrefix}-progressbar-container`);
-    this.applyStyle(Container, this.outerBarStyle);
+    const OuterBar = document.createElement('div');
+    this.OuterBar = OuterBar;
+    OuterBar.classList.add(`${this.cssPrefix}-progressbar-outerbar`);
+    this.applyStyle(OuterBar, this.outerBarStyle);
 
     // Create inner bar
-    const Bar = document.createElement('div');
-    this.Bar = Bar;
-    Bar.classList.add(`${this.cssPrefix}-progressbar`);
-    Bar.style.height = this.height;
-    Bar.style.width = 0;
-    this.applyStyle(Bar, this.innerBarStyle);
+    const InnerBar = document.createElement('div');
+    this.InnerBar = InnerBar;
+    InnerBar.classList.add(`${this.cssPrefix}-progressbar-innerbar`);
+    InnerBar.style.height = this.height;
+    InnerBar.style.width = 0;
+    this.applyStyle(InnerBar, this.innerBarStyle);
 
     // Check configurations
     if (this.autoStart) this.startProgress();
     if (this.initProgress > 0) this.setProgress(this.initProgress);
 
-    Container.append(Bar);
+    OuterBar.append(InnerBar);
 
-    return Container;
+    return OuterBar;
   };
 }
 
