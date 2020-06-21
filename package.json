@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "main": "dist/index.js",
   "license": "MIT",
+  "private": "false",
   "repository": {
     "url": "https://github.com/ChrisLFieldsII/ProgressBar-VanillaJS",
     "type": "git"
