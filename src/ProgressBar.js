@@ -143,13 +143,25 @@ class ProgressBar {
     return this;
   }
 
+  /**
+   * @desc Use an interval to control Bar.
+   * Note: Clients that use repeat: true are responsible for calling `endProgress`
+   * @param {Object} opts Options
+   */
   startInterval = ({ progress = 0, repeat = false, step = 20, timeSec = 1 } = {}) => {
     // if want to repeat, autoEnd can not be enabled
     if (repeat) this.autoEnd = false;
 
     const setIntervalProgress = () => {
-      let newProgress = this.progress + step;
-      if (newProgress > 100 && repeat) newProgress = 0;
+      let addition = step;
+      let diffFromMaxProgress = 100 - this.progress;
+
+      if (diffFromMaxProgress > step) addition = step;
+      else if (diffFromMaxProgress < step) addition = diffFromMaxProgress;
+
+      let newProgress = this.progress + addition;
+      if (newProgress >= 100 && this.progress == 100 && repeat) newProgress = 0;
+
       this.setProgress(newProgress);
     };
 
