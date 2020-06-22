@@ -21,7 +21,7 @@ function FormRow({ label = '', value = '', onChange, type = 'number' }) {
   const Container = document.createElement('div');
   const Label = document.createElement('label');
   const Input = document.createElement('input');
-  Label.innerHTML = label;
+  Label.innerHTML = label + ':&nbsp;';
   Input.type = type;
   Input.value = value;
   Input.style.margin = '10px';
@@ -75,7 +75,7 @@ export const Interval = () => {
     },
   });
 
-  Bar.startInterval();
+  Bar.startInterval({ step, timeSec, repeat });
 
   Container.append(Comp, StepFormRow, TimeFormRow, RepeatRow);
 
@@ -93,7 +93,7 @@ export const Promises = () => {
 
   // Create input to control number of promises
   const NumPromisesFormRow = FormRow({
-    label: 'How many Promises to load:&nbsp;',
+    label: 'How many Promises to load',
     value: numPromises,
     onChange: (e) => {
       numPromises = e.target.value;
@@ -104,7 +104,7 @@ export const Promises = () => {
 
   // Create input to control max wait time of any promise
   const MaxWaitTimeFormRow = FormRow({
-    label: 'Max time a Promise can wait:&nbsp;',
+    label: 'Max time a Promise can wait',
     value: maxWait,
     onChange: (e) => {
       maxWait = e.target.value;
@@ -159,7 +159,7 @@ export const AutoHideOnEnd = () => {
   Btn.innerText = 'Reset';
   Btn.classList.add('btn', 'btn-primary', 'mt-3');
   Btn.addEventListener('click', () => {
-    Bar.startInterval({ repeat: false, step: 40 });
+    Bar.startInterval({ repeat: false, step: 40, progress: 0 });
   });
 
   Container.append(Comp, Btn);
@@ -167,4 +167,27 @@ export const AutoHideOnEnd = () => {
   return Container;
 };
 
-// export const Pr
+export const ManuallyControlled = () => {
+  const Bar = new ProgressBar({
+    autoEnd: false,
+  });
+  const Comp = Bar.render();
+
+  const Container = document.createElement('div');
+
+  let progress = 0;
+
+  // Create input to control interval time
+  const ProgressRow = FormRow({
+    label: 'Set Progress',
+    value: progress + '',
+    onChange: (e) => {
+      progress = Number(e.target.value);
+      Bar.setProgress(progress);
+    },
+  });
+
+  Container.append(Comp, ProgressRow);
+
+  return Container;
+};
